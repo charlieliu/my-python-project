@@ -3,34 +3,66 @@ import random
 class thing:
     def __init__(self, weight=0, species='nothing'):
         self.weight = float(weight)
+        self.name = 'nothing'
+        self.kingdom = 'nothing'
         self.species = species
         self.id = 0
-class forest:
-    def __init__(self):
-        self.habitat = []
-    def enter(self, item):
-        self.habitat.append(item)
-        print('enter:', item.species, 'id:', item.id, 'gender:', item.gender)
-    def leave(self):
-        pass
+class area:
+    def __init__(self, name = 'area'):
+        self.members = []
+        self.name = name
+        self.lastMemberId = 0
+    def updateIndex(self):
+        for idx, member in enumerate(self.members):
+            member.idx = idx
     def exist(self):
-        # species = []
-        # for item in self.habitat:
-        #     if species[item.species]:
-        #         species[item.species] += 1
-        #     else:
-        #         species[item.species] = 1
-        # for item in species:
-        #     print('exist:', item)
-        print('exist:', len(self.habitat), type(self.habitat))
+        for item in self.members:
+            print('[', self.name, '] exist:', item.species, 'idx:', item.idx, 'id:', item.id)
+class farm(area):
+    def __init__(self):
+        super().__init__('farm')
+        self.habitat = {'coop':[],'soil':[],'pool':[]}
+    def enter(self, item):
+        self.lastMemberId += 1
+        item.id = self.lastMemberId
+        item.farmID = self.lastMemberId
+        self.members.append(item)
+        print('[', self.name, '] new member:', item.species, 'id:', item.id, 'gender:', item.gender)
+        self.updateIndex()
+    def leave(self, idx):
+        item = self.members[idx]
+        del self.members[idx]
+        self.updateIndex()
+        print('[', self.name, '] leave member:', item.species, 'id:', item.id, 'gender:', item.gender)
+    def feed(self):
+        for member in self.members:
+            if member.species == 'animal':
+                member.weight += 0.1 * member.weight
+                print('[', self.name, '] exist:', item.species, 'id:', item.id, 'gender:', item.gender)
+class forest(area):
+    def __init__(self):
+        super().__init__('forest')
+        self.habitat = {'surface':[],'soil':[],'lake':[]}
+    def enter(self, item):
+        self.lastMemberId += 1
+        item.id = self.lastMemberId
+        item.forestID = self.lastMemberId
+        self.members.append(item)
+        random.shuffle(self.members)
+        self.updateIndex()
+    def leave(self, idx):
+        item = self.members[idx]
+        del self.members[idx]
+        self.updateIndex()
+        print('[', self.name, '] leave member:', item.species, 'id:', item.id, 'gender:', item.gender)
     def find(self):
         probability = random.randint(0, 100)
-        if probability < 50:
-            item = random.choice(self.habitat)
-            print('find:', item.species, 'id:', item.id)
-            return item
+        if probability < 78:
+            item = random.choice(self.members)
         else:
-            return thing()
+            item = thing()
+        print('[', self.name, '] find:', item.species, 'id:', item.id, 'has', len(self.members), 'members')
+        return item
 class creature:
     def __init__(self, weight=0, species='creature'):
         self.mouth = 0
@@ -38,7 +70,7 @@ class creature:
         self.species = species
         self.weight = float(weight)
         self.id = 0
-        print(self.species, 'Weight:', self.weight)
+        # print(self.species, 'Weight:', self.weight)
     def drink(self, water):
         self.water += float(water)
 class plant(creature):
@@ -105,7 +137,7 @@ class animal(creature):
             print(self.species, 'No food:', food.weight)
         else:
             self.weight += food.weight
-            print(self.species, 'eat:', food.weight, 'weight:', self.weight)
+            print(self.species, 'eat:', food.species, food.weight, 'weight:', self.weight)
             self.working_hour += 1
             self.sleepiness(food.weight)
     def sleepiness(self, hour):
@@ -145,70 +177,87 @@ class human(animal):
         self.height = height
         self.eye = 2
         self.max_working_hour = float(8)
-        self.prey = []
         self.gender = gender
-        self.food = ['vegetable','dock','chicken']
+        self.food = ['vegetable','duck','chicken']
     def BMI(self):
         return self.weight / ((self.height/100)**2)
     def work(self):
         self.working_hour += 1
-    def cook(self):
-        meals = []
-        while self.prey:
-            self.working_hour += 1
-            food = self.prey.pop()
-            meals.append(food)
-            self.sleepiness(0.1 * food.weight)
-            print(self.name, 'cook:', food.species)
-            print(self.name, 'has meals:', len(meals))
-        return meals
+    def cook(self, ingredients):
+        self.sleepiness(0.1 * ingredients.weight)
+        return ingredients
     def hunt(self, forest):
-        while self.working_hour <= self.max_working_hour:
-            print('working_hour:', self.working_hour)
-            print('max_working_hour:', self.max_working_hour)
-            self.sleepiness(1)
+        prey = {'food':[],'others':[]}
+        working_hour = 0.1
+        while (self.working_hour + working_hour) < self.max_working_hour:
             item = forest.find()
-            print('charlie find:', item.species, 'id:', item.id)
+            for i in self.food:
+                print('species', item.species, 'check:', i, 'result:', i == item.species)
+            print('in list:', item.species in self.food)
             if item.species in self.food:
-                self.prey.append(item)
+                forest.leave(item.idx)
+                prey['food'].append(item)
+                print('food:', item.species, 'kingdom:', item.kingdom)
+            elif item.kingdom == 'animal':
+                forest.leave(item.idx)
+                prey['others'].append(item)
+                print('others:', item.species, 'kingdom:', item.kingdom)
+            self.sleepiness(working_hour)
+        print('working_hour:', self.working_hour, '/', self.max_working_hour)
+        print('charlie food:', len(prey['food']), 'others:', len(prey['others']))
+        return prey
+
 
 forest = forest()
-print('==============================================================')
-for i in range(1, 1001):
-    item = plant(0.1, 'vegetable')
-    item.id = i
+for i in range(1000):
+    item = plant(0.1, 'tree')
     forest.enter(item)
-print('==============================================================')
-for i in range(1001, 1101):
-    weight = random.random()
+for i in range(100):
+    weight = random.uniform(0.01, 0.1)
     item = worm(weight)
-    item.id = i
     forest.enter(item)
-print('==============================================================')
-for i in range(1101, 1201):
-    item = insect(0.1)
-    item.id = i
+for i in range(100):
+    weight = random.random()
+    item = insect(weight)
     forest.enter(item)
-print('==============================================================')
-for i in range(1201, 1211):
-    item = duck(10)
-    item.id = i
+for i in range(100):
+    weight = random.uniform(0.1, 3)
+    item = duck(weight)
     forest.enter(item)
+# forest.exist()
 print('==============================================================')
-for i in range(1201, 1211):
-    item = bird(2, 'chicken')
-    item.id = i
+farm = farm()
+for i in range(100):
+    item = plant(0.1, 'vegetable')
+    farm.enter(item)
+for i in range(10):
+    weight = random.uniform(0.9, 1.1)
+    item = bird(weight, 'chicken')
     item.food = ['vegetable','worm','insect']
-    forest.enter(item)
+    farm.enter(item)
+# farm.exist()
 print('==============================================================')
-
-forest.exist()
 
 charlie = human(78, 'chalrie', 172, 'male')
 print(charlie.name, charlie.BMI())
-charlie.hunt(forest)
-meals = charlie.cook()
+meals = []
+meals_weight = 0
+prey = charlie.hunt(forest)
+print('charlie find food:', len(prey['food']), 'others:', len(prey['others']))
+while prey['food']:
+    ingredients = prey['food'].pop()
+    meal = charlie.cook(ingredients)
+    if meals_weight < 1:
+        meals_weight += meal.weight
+        meals.append(meal)
+        print('charlie cook:', meal.species, 'has meals:', len(meals))
+while prey['food']:
+    item = prey['food'].pop()
+    farm.enter(item)
+while prey['others']:
+    item = prey['others'].pop()
+    farm.enter(item)
 while meals:
     item = meals.pop()
     charlie.eat(item)
-    print('charlie eat:', item.species, item.weight, item.id)
+    # print('charlie eat:', item.species, item.weight, item.id)
