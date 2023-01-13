@@ -49,20 +49,52 @@ class creature(thing):
         self.family = ''            # Text Type: str
         self.genus = ''             # Text Type: str
         self.species = ''           # Text Type: str
-        self.gender = ''            # Text Type:        str
-        self.water = float(0)       # Numeric Types:    float
+        self.gender = ''            # Text Type: str
+        self.water = float(0)       # Numeric Types: float
+        self.protein = float(0)     # Numeric Types: float
         # self.info()
     def setWeight(self, weight):
-        self.weight += float(weight)
+        self.weight = float(weight)
 # 動物界
 class animal(creature):
     def __init__(self, weight=0):
-        super().__init__(weight)   # 使用 super() 繼承 father __init__ 裡所有屬性
-        self.kingdom = 'Metazoan'           # 動物界
+        super().__init__(weight)        # 使用 super() 繼承 father __init__ 裡所有屬性
+        self.kingdom = 'Metazoan'       # 動物界
+        self.urine = float(0)           # 尿液 Numeric Types: float
+        self.stool = float(0)           # 糞便 Numeric Types: float
+        self.exchange_rate = 0.37       # 換肉率 Numeric Types: float
         # self.info()
-    def drink(self, water):
-        self.water += float(water)
-        self.weight += float(water)
+        '''
+        https://www.loverabbit.org/article_detail/153
+        蛋白質保留率(Protein retention)
+        肉雞 37%
+        鮭魚 28%
+        肉豬 21%
+        水產動物平均 19%
+        兔肉 17-19%。
+        肉牛 13%
+        '''
+    def drink(self, amount):
+        amount = float(amount)
+        self.water += amount
+        self.weight += amount
+        self.urine += amount * self.exchange_rate
+    def eat(self, amount):
+        amount = float(amount)
+        self.weight += amount
+        self.stool += amount * self.exchange_rate
+    def pee(self, amount):
+        amount = float(amount)
+        if amount > self.urine:
+            amount = self.urine
+        self.water -= amount
+        self.weight -= amount
+    def poop(self, amount):
+        amount = float(amount)
+        if amount > self.stool:
+            amount = self.stool
+        self.weight -= float(amount)
+        self.stool -= amount
 # 脊索動物門 https://zh.wikipedia.org/wiki/%E8%84%8A%E6%A4%8E%E5%8A%A8%E7%89%A9
 class Chordata(animal): 
     def __init__(self, weight=0):
