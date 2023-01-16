@@ -11,11 +11,10 @@ class duck(Anas):
         # self.info()
 class cow(Mammalia):
     def __init__(self, weight=0):
-        super().__init__(weight)     # 使用 super() 繼承 father __init__ 裡所有屬性
+        super().__init__(weight)            # 使用 super() 繼承 father __init__ 裡所有屬性
         self.leg = 4                        # Numeric Types: int
         self.species = 'cow'
         self.setScientificName()
-        self.scientific_name = self.genus + ' ' + self.species
         self.food = ['vegetable','grass']   # list
         self.activity_range = {'land'}      # set
         # self.info()
@@ -26,7 +25,7 @@ class human(Mammalia):
         self.family = 'Hominidae'                       # 人科
         self.genus = 'Homo'                             # 人屬
         self.species = 'sapiens'                        # 智人種
-        self.scientific_name = self.genus + ' ' + self.species
+        self.setScientificName()
         self.leg = 2                                    # Numeric Types:    int
         self.name = name
         self.max_working_hour = float(8)
@@ -118,10 +117,7 @@ platyrhynchos.setScientificName()
 platyrhynchos.info()
 
 # 疣鼻棲鴨 荷西時期引進台灣（學名：Cairina moschata）https://zh.wikipedia.org/zh-tw/%E7%96%A3%E9%BC%BB%E6%A3%B2%E9%B4%A8
-moschata = duck(0.2)
-moschata.genus = 'Anas'
-moschata.species = 'platyrhynchos'
-moschata.setScientificName()
+moschata = moschata(0.2)
 moschata.info()
 
 farm = farm()

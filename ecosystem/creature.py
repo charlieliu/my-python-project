@@ -30,3 +30,5 @@ class creature(thing):
         self.weight = float(weight)
     def setScientificName(self):
         self.scientific_name = self.genus + ' ' + self.species
+    def setGender(self, gender):
+        self.gender = gender

@@ -1,7 +1,11 @@
 from ecosystem.__main__ import *
 from ecosystem.creature import *
 from ecosystem.kingdom import *
-
+class phylum(kingdom): 
+    def __init__(self, weight=0, kingdom='', phylum = ''):
+        super().__init__(weight, kingdom)   # 使用 super() 繼承 father __init__ 裡所有屬性
+        self.phylum = phylum                # 門
+        # self.info()
 class Chordata(animal): 
     def __init__(self, weight=0):
         super().__init__(weight)   # 使用 super() 繼承 father __init__ 裡所有屬性

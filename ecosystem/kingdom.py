@@ -1,13 +1,18 @@
 from ecosystem.__main__ import *
 from ecosystem.creature import *
-
+class kingdom(creature):
+    def __init__(self, weight=0, kingdom=''):
+        super().__init__(weight)    # 使用 super() 繼承 father __init__ 裡所有屬性
+        self.kingdom = kingdom      # 界
+        # self.info()
 # 植物界
 class plant(creature):
     def __init__(self, weight=0):
         super().__init__(weight)            # 使用 super() 繼承 father __init__ 裡所有屬性
         self.kingdom = 'Plantae'            # 植物界
-        self.activity_range = {'land'}      # Set Types:    et
+        self.activity_range = {'land'}      # Set Types: et
         self.chloroplast = True             # 有沒有葉綠體 Boolean Type: bool
+        # self.info()
     '''
     光合作用也稱光能合成 photosynthesis
     是植物、藻類和藍菌等生產者利用光能把一氧化二氫、二氧化碳或硫化氫等無機物轉變成可以儲存化學能的有機物（比如碳水化合物）的生物過程。

@@ -9,11 +9,18 @@ class Ragdoll(catus):
 
 kitty = Ragdoll(4.5)
 kitty.setName('kitty')
-kitty.info()
+kitty.setGender('female');
 
 cookie = Ragdoll(5.1)
 cookie.setName('cookie')
-cookie.info()
+cookie.setGender('male');
 
 tiger = tigris()
+
+print('kitty', type(kitty), kitty)
+print('cookie', type(cookie), cookie)
+print('tiger', type(tiger), tiger)
+
+kitty.info()
+cookie.info()
 tiger.info()
