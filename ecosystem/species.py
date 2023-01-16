@@ -1,4 +1,12 @@
-from genus import *
+from ecosystem.__main__ import *
+from ecosystem.creature import *
+from ecosystem.kingdom import *
+from ecosystem.phylum import *
+from ecosystem.className import *
+from ecosystem.order import *
+from ecosystem.family import *
+from ecosystem.genus import *
+
 # 家貓（學名：Felis catus 或 Felis silvestris catus） https://zh.wikipedia.org/wiki/%E7%8C%AB
 class catus(Felis):
     def __init__(self, weight=0):

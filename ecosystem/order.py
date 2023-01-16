@@ -1,4 +1,9 @@
-from className import *
+from ecosystem.__main__ import *
+from ecosystem.creature import *
+from ecosystem.kingdom import *
+from ecosystem.phylum import *
+from ecosystem.className import *
+
 # 食肉目 https://zh.wikipedia.org/wiki/%E9%A3%9F%E8%82%89%E7%9B%AE
 class Carnivora(Mammalia): 
     def __init__(self, weight=0, ):

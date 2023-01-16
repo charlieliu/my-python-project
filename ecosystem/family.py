@@ -1,4 +1,9 @@
-from order import *
+from ecosystem.__main__ import *
+from ecosystem.creature import *
+from ecosystem.kingdom import *
+from ecosystem.phylum import *
+from ecosystem.className import *
+from ecosystem.order import *
 # 貓科 https://zh.wikipedia.org/wiki/%E7%8C%AB%E7%A7%91
 class Felidae(Carnivora):
     def __init__(self, weight=0):

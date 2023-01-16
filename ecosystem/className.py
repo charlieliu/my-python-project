@@ -1,4 +1,8 @@
-from phylum import *
+from ecosystem.__main__ import *
+from ecosystem.creature import *
+from ecosystem.kingdom import *
+from ecosystem.phylum import *
+
 # 哺乳類 哺乳綱 https://zh.wikipedia.org/wiki/%E5%93%BA%E4%B9%B3%E5%8A%A8%E7%89%A9
 class Mammalia(Chordata):
     def __init__(self, weight=0):

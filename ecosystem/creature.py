@@ -1,4 +1,5 @@
-from main import *
+from ecosystem.__main__ import *
+
 '''
 現代生物分類依次採用
 界 kingdom

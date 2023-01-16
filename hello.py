@@ -1,4 +1,5 @@
-from species import *
+from ecosystem.species import *
+
 class duck(Anas):
     def __init__(self, weight=0):
         super().__init__(weight)                        # 使用 super() 繼承 father __init__ 裡所有屬性

@@ -1,4 +1,11 @@
-from family import *
+from ecosystem.__main__ import *
+from ecosystem.creature import *
+from ecosystem.kingdom import *
+from ecosystem.phylum import *
+from ecosystem.className import *
+from ecosystem.order import *
+from ecosystem.family import *
+
 # 貓屬 https://zh.wikipedia.org/wiki/%E8%B2%93%E5%B1%AC
 class Felis(Felidae):
     def __init__(self, weight=0):

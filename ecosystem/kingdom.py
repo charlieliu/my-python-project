@@ -1,4 +1,6 @@
-from creature import *
+from ecosystem.__main__ import *
+from ecosystem.creature import *
+
 # 植物界
 class plant(creature):
     def __init__(self, weight=0):

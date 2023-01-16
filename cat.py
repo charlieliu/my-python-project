@@ -1,4 +1,4 @@
-from species import *
+from ecosystem.species import *
 
 # 布偶貓 https://zh.wikipedia.org/wiki/%E5%B8%83%E5%81%B6%E8%B2%93
 class Ragdoll(catus):
