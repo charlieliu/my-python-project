@@ -1,4 +1,4 @@
-import sys
+# https://ithelp.ithome.com.tw/articles/10209416
 import pygame
 
 pygame.init()

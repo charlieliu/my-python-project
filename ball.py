@@ -1,3 +1,4 @@
+# https://ithelp.ithome.com.tw/articles/10209606
 import pygame, random, math
 
 pygame.init()
