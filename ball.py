@@ -22,7 +22,7 @@ rect = ball.get_rect()
 rect.center = (random.randint(100,540),random.randint(100,380)) # 球隨機起始位置
 x, y = rect.topleft                                             # 球左上角坐標
 direction = random.randint(20,70)                               # 起始角度
-radian = math.radians(direction )                               # 轉為弳度
+radian = math.radians(direction)                                # 轉為弳度
 dx = 5 * math.cos(radian)                                       # 球水平運動速度
 dy = -5 * math.sin(radian)                                      # 球垂直運動速度
 
