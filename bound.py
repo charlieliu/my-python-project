@@ -69,14 +69,11 @@ class circle(pygame.sprite.Sprite):
     def bound(self, item):
         x = abs(self.x - item.x)
         y = abs(self.y - item.y)
-        radium = self.radium
-        if item.radium > self.radium:
-            radium = item.radium
-        if x > radium or y > radium:
-            return # 無碰撞
-        print(self.name, self.x, self.y)
-        print(item.name, item.x, item.y)
-        print('rebound', x, y)
+        distance = math.sqrt(x * x + y * y)
+        radium = self.radium + item.radium
+        if distance > radium:
+            return # 無碰撞ß
+        print('rebound', x, y, distance, radium)
         bound = False 
         if (self.dx * item.dx) <= 0:
             self.reboundX()
