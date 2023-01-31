@@ -71,19 +71,19 @@ class Chess(pygame.sprite.Sprite):
         # 到達左右邊界
         if self.rect.left <= self.radium and dx < 0:
             self.x = self.radium
-            print('left', self.rect.left, self.radium)
+            print(self.name, 'left', self.rect.left, self.radium)
         elif self.rect.right >= width and dx > 0:
             self.x = (width - self.radium)
-            print('right', self.rect.right, width)
+            print(self.name, 'right', self.rect.right, width)
         else:
             self.x += (dx * self.radium * 2)
         # 到達上下邊界
         if self.rect.top <= self.radium and dy < 0:
             self.y = self.radium
-            print('top', self.rect.top, self.radium)
+            print(self.name, 'top', self.rect.top, self.radium)
         elif self.rect.bottom >= height and dy > 0:
             self.y = (height - self.radium)
-            print('bottom', self.rect.top, height)
+            print(self.name, 'bottom', self.rect.top, height)
         else:
             self.y += (dy * self.radium * 2)
         self.rect.center = (self.x, self.y)
@@ -150,8 +150,7 @@ class Chess(pygame.sprite.Sprite):
         self.defence = newDefence
     def setMagic(self, newMagic):
         self.magic = newMagic
-    
-    
+
 class Hero(Chess):
     def __init__(self, name):
         super().__init__(name, (0,0,255)) # 使用 super() 繼承 father __init__ 裡所有屬性
@@ -162,13 +161,11 @@ class Hero(Chess):
         self.image.fill((255,255,255))
         self.rect = self.image.get_rect()                   # 取得球體區域
         self.rect.center = (self.x, self.y)                 # 初始位置
-        shapes = int(math.ceil(self.health/10)) + 2
+        shapes = int(math.ceil(self.health/10)) + 3
         points = self.getPoints(shapes)
         print('drawShape shapes:', shapes, 'points:', points)
         pygame.draw.polygon(self.image, self.color, points, 0)
         screen.blit(self.image, self.rect.topleft)
-        # pygame.draw.circle(self.image, self.color, (self.radium,self.radium), self.radium, 0)
-        # screen.blit(self.image, self.rect.topleft)
     def getPoints(self, shapes):
         list = []
         angle = 360 / shapes
@@ -247,14 +244,10 @@ maze = area()
 Player = Hero('Tom')
 maze.add(Player)
 
-ememies = pygame.sprite.Group()
 for i in range(10):
     ememy = Enemy()
     ememy.update()
-    ememies.add(ememy)
     maze.add(ememy)
-
-ememies.draw(screen)
 
 clock = pygame.time.Clock()
 maze.update()
