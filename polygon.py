@@ -72,10 +72,10 @@ def getPoints(shapes):
     
 def drawCenterPolygon(shapes):
     list = {}
-    max_x
-    min_x
-    max_y
-    min_y
+    global max_x
+    global min_x
+    global max_y
+    global min_y
     for shapes in range(3, shapes+1):
         list[shapes] = getCenterPoints(shapes)
     gap = 256 / shapes
@@ -121,6 +121,6 @@ def getCenterPoints(shapes):
     
 screen = turtle.Screen()
 screen.setup(800,600)
-drawPolygon(50)
-# drawCenterPolygon(50)
+# drawPolygon(50)
+drawCenterPolygon(50)
 screen.mainloop()
