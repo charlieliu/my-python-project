@@ -65,6 +65,16 @@ class Chess(pygame.sprite.Sprite):
         self.rect.center = (self.x, self.y)                             # 初始位置
         pygame.draw.circle(self.image, self.color, (self.radium,self.radium), self.radium, 0)
         screen.blit(self.image, self.rect.topleft)
+    def gameOver():
+        screen.fill((0, 0, 0))
+        font = pygame.font.SysFont('arial', 40)
+        title = font.render('Game Over', True, (255, 255, 255))
+        restart_button = font.render('R - Restart', True, (255, 255, 255))
+        quit_button = font.render('Q - Quit', True, (255, 255, 255))
+        screen.blit(title, (width/2 - title.get_width()/2, height/2 - title.get_height()/3))
+        screen.blit(restart_button, (width/2 - restart_button.get_width()/2, height/1.9 + restart_button.get_height()))
+        screen.blit(quit_button, (width/2 - quit_button.get_width()/2, height/2 + quit_button.get_height()/2))
+        pygame.display.update()
     def move(self, dx, dy):
         self.dx = dx
         self.dy = dy
@@ -157,19 +167,32 @@ class Hero(Chess):
         self.health = 20
         self.role = 0
     def drawShape(self):
-        self.image = pygame.Surface([self.radium*2, self.radium*2])
-        self.image.fill((255,255,255))
-        self.rect = self.image.get_rect()                   # 取得球體區域
-        self.rect.center = (self.x, self.y)                 # 初始位置
-        shapes = int(math.ceil(self.health/10)) + 3
-        points = self.getPoints(shapes)
-        print('drawShape shapes:', shapes, 'points:', points)
-        pygame.draw.polygon(self.image, self.color, points, 0)
-        screen.blit(self.image, self.rect.topleft)
+        if self.health > 0:
+            self.image = pygame.Surface([self.radium*2, self.radium*2])
+            self.image.fill((255,255,255))
+            self.rect = self.image.get_rect()                   # 取得球體區域
+            self.rect.center = (self.x, self.y)                 # 初始位置
+            shapes = int(math.ceil(self.health/10)) + 3
+            points = self.getPoints(shapes)
+            print('drawShape shapes:', shapes, 'points:', points)
+            pygame.draw.polygon(self.image, self.color, points, 0)
+            screen.blit(self.image, self.rect.topleft)
+        else:
+            self.gameOver()
     def getPoints(self, shapes):
         list = []
         angle = 360 / shapes
-        cross = 0
+        if self.dy == -1:
+            cross = 180
+        elif self.dy == 1:
+            cross = 0
+        elif self.dx == -1:
+            cross = 90
+        elif self.dx == 1:
+            cross = 270
+        else:
+            cross = 0
+        print('getPoints cross:', cross, 'dx:', self.dx, 'dy:', self.dy)
         x, y = 0, 0
         max_x = float(0)
         min_x = float(0)
@@ -233,9 +256,9 @@ class area:
                         activity.append(item2.id)
                         item1.rebound()
                         item2.rebound()
-                    if item1.health <= 0:
+                    if item1.health <= 0 and item1 in self.members:
                         self.members.remove(item1)
-                    if item2.health <= 0:
+                    if item2.health <= 0 and item2 in self.members:
                         self.members.remove(item2)
         pygame.display.update()        
 
