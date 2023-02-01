@@ -10,6 +10,8 @@ from pygame.locals import (
     K_RIGHT,
     K_SPACE,
     K_ESCAPE,
+    K_q,
+    K_r,
     KEYDOWN,
     QUIT,
 )
@@ -45,7 +47,7 @@ class Chess(pygame.sprite.Sprite):
     defence = 1
     magic = 1
     role = 1
-    def __init__(self, name, color=(0,0,0), radium=10):
+    def __init__(self, name='', color=(0,0,0), radium=10):
         pygame.sprite.Sprite.__init__(self)
         self.id = getMemberId()
         self.name = name
@@ -65,16 +67,6 @@ class Chess(pygame.sprite.Sprite):
         self.rect.center = (self.x, self.y)                             # 初始位置
         pygame.draw.circle(self.image, self.color, (self.radium,self.radium), self.radium, 0)
         screen.blit(self.image, self.rect.topleft)
-    def gameOver():
-        screen.fill((0, 0, 0))
-        font = pygame.font.SysFont('arial', 40)
-        title = font.render('Game Over', True, (255, 255, 255))
-        restart_button = font.render('R - Restart', True, (255, 255, 255))
-        quit_button = font.render('Q - Quit', True, (255, 255, 255))
-        screen.blit(title, (width/2 - title.get_width()/2, height/2 - title.get_height()/3))
-        screen.blit(restart_button, (width/2 - restart_button.get_width()/2, height/1.9 + restart_button.get_height()))
-        screen.blit(quit_button, (width/2 - quit_button.get_width()/2, height/2 + quit_button.get_height()/2))
-        pygame.display.update()
     def move(self, dx, dy):
         self.dx = dx
         self.dy = dy
@@ -130,36 +122,6 @@ class Chess(pygame.sprite.Sprite):
         self.drawShape()
         item.drawShape()
         return True
-    # we're gonna get setters and getters
-    # These are getters, where we can check the health or attack of the character
-    def getHealth(self):
-        return self.health
-    def getAttack(self):
-        return self.attack
-    def getLuck(self):
-        return self.luck
-    def getRanged(self):
-        return self.ranged
-    def getDefence(self):
-        return self.defence
-    def getMagic(self):
-        return self.magic
-    def getName(self):
-        return self.name
-    # setters is what we can use to change a variable
-    # for example if we want to set a new attack value
-    def setHealth(self, newHealth):
-        self.health = newHealth
-    def setAttack(self, newAttack):
-        self.attack = newAttack
-    def setLuck(self, newLuck):
-        self.luck = newLuck
-    def setRanged(self, newRanged):
-        self.ranged = newRanged
-    def setDefence(self, newDefence):
-        self.defence = newDefence
-    def setMagic(self, newMagic):
-        self.magic = newMagic
 
 class Hero(Chess):
     def __init__(self, name):
@@ -178,7 +140,7 @@ class Hero(Chess):
             pygame.draw.polygon(self.image, self.color, points, 0)
             screen.blit(self.image, self.rect.topleft)
         else:
-            self.gameOver()
+            gameOver()
     def getPoints(self, shapes):
         list = []
         angle = 360 / shapes
@@ -218,13 +180,25 @@ class Hero(Chess):
         return points
         
 class Enemy(Chess):
-    def __init__(self):
-        super().__init__('ememy', (255,0,0))
-        self.name = 'ememy_' + str(self.id)
+    def __init__(self, name='Enemy', color=(0,255,0), radium=10):
+        super().__init__(name, color, radium)
+        self.name = 'Enemy_' + str(self.id)
         self.drawShape()
     def update(self):
-        self.move(random.randint(-1, 1), random.randint(-1, 1))
+        d = random.randint(-1, 1)
+        dx = 0
+        dy = 0
+        if d == -1:
+            dx = random.randint(-1, 1)
+        if d == 1:
+            dy = random.randint(-1, 1)
+        self.move(dx, dy)
         self.drawShape()
+        
+class Boss(Enemy):
+    def __init__(self, name='Boss', color=(255,0,0), radium=10):
+        super().__init__(name, color, radium)
+        self.health = self.health * 2
         
 class area:
     members = []
@@ -260,20 +234,38 @@ class area:
                         self.members.remove(item1)
                     if item2.health <= 0 and item2 in self.members:
                         self.members.remove(item2)
-        pygame.display.update()        
+        pygame.display.update()
 
 maze = area()
-
 Player = Hero('Tom')
-maze.add(Player)
 
-for i in range(10):
-    ememy = Enemy()
-    ememy.update()
-    maze.add(ememy)
+def gameStart():
+    global maze
+    global Player
+    maze.members = []
+    Player = Hero('Tom')
+    maze.add(Player)
+    boss = Boss('Jeery')
+    maze.add(boss)
+    for i in range(10):
+        ememy = Enemy(i)
+        maze.add(ememy)
+    maze.update()
 
+def gameOver():
+    screen.blit(background, (0,0)) # 清除繪圖視窗
+    screen.fill((0, 0, 0))
+    font = pygame.font.SysFont('arial', 40)
+    title = font.render('Game Over', True, (255, 255, 255))
+    restart_button = font.render('R - Restart', True, (255, 255, 255))
+    quit_button = font.render('Q - Quit', True, (255, 255, 255))
+    screen.blit(title, (width/2 - title.get_width()/2, height/2 - title.get_height()/3))
+    screen.blit(restart_button, (width/2 - restart_button.get_width()/2, height/1.9 + restart_button.get_height()))
+    screen.blit(quit_button, (width/2 - quit_button.get_width()/2, height/2 + quit_button.get_height()/2))
+    pygame.display.update()
+
+gameStart()
 clock = pygame.time.Clock()
-maze.update()
 
 running = True
 while running:
@@ -283,22 +275,36 @@ while running:
         # Did the user hit a key?
         if event.type == KEYDOWN:
             # Was it the Escape key? If so, stop the loop.
-            if event.key == K_ESCAPE:
+            if event.key == K_ESCAPE or event.key == K_q:
                 running = False
+            elif Player.health <= 0 and event.key == K_r:
+                gameStart()
             elif event.key == K_UP:
-                Player.move(0, -1)
+                if Player.health <= 0:
+                    gameOver()
+                else:
+                    Player.move(0, -1)
                 maze.update()
             elif event.key == K_DOWN:
-                Player.move(0, 1)
+                if Player.health <= 0:
+                    gameOver()
+                else:
+                    Player.move(0, 1)
                 maze.update()
             elif event.key == K_LEFT:
-                Player.move(-1, 0)
+                if Player.health <= 0:
+                    gameOver()
+                else:
+                    Player.move(-1, 0)
                 maze.update()
             elif event.key == K_RIGHT:
-                Player.move(1, 0)
+                if Player.health <= 0:
+                    gameOver()
+                else:
+                    Player.move(1, 0)
                 maze.update()
             elif event.key == K_SPACE:
-                print('HP:', Player.getHealth())
+                continue
             else:
                 print('event.key:', event.key)
         # Did the user click the window close button? If so, stop the loop.
