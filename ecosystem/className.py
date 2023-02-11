@@ -1,6 +1,13 @@
-from ecosystem.__main__ import *
-from ecosystem.creature import *
-from ecosystem.kingdom import *
+'''
+現代生物分類依次採用
+界 kingdom
+門 phylum 動物學 / division 植物學
+綱 class
+目 order
+科 family
+屬 genus
+種 species
+'''
 from ecosystem.phylum import *
 class className(phylum): 
     def __init__(self, weight=0, kingdom='', phylum = '', className = ''):

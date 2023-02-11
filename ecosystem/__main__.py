@@ -1,4 +1,3 @@
-import random
 lastMemberId = 0
 def getMemberId():
     global lastMemberId

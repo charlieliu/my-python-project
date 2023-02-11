@@ -1,4 +1,14 @@
-from ecosystem.__main__ import *
+'''
+現代生物分類依次採用
+界 kingdom
+門 phylum 動物學 / division 植物學
+綱 class
+目 order
+科 family
+屬 genus
+種 species
+'''
+import random
 from ecosystem.creature import *
 class kingdom(creature):
     def __init__(self, weight=0, kingdom=''):

@@ -1,7 +1,6 @@
-from ecosystem.__main__ import *
-
 '''
 現代生物分類依次採用
+creature
 界 kingdom
 門 phylum 動物學 / division 植物學
 綱 class
@@ -10,6 +9,7 @@ from ecosystem.__main__ import *
 屬 genus
 種 species
 '''
+from ecosystem.__main__ import *
 class creature(thing):
     def __init__(self, weight=0):
         super().__init__(weight, '')   # 使用 super() 繼承 father __init__ 裡所有屬性
